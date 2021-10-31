@@ -10,6 +10,9 @@ function App() {
     //const [estado, funcEstado] = useState(estado_inicial)
     const [contador, setContador] = useState(0);
     const [titulo, setTitulo] = useState("Mi Título");
+    const [texto, setTexto] = useState("textito");
+
+    //Levantamiento de estado - LiftingState
 
     // let titulo = "Titulo Codigo";
 
@@ -18,6 +21,31 @@ function App() {
     const actualizarContador = () => {
         setContador(contador + 1);
     };
+
+    const actualizarTexto = (e) => {
+        console.log(e);
+        //actualizar el estado
+        setTexto(e.target.value);
+    };
+
+    const productos = [
+        {
+            nombre: "Peluche",
+            precio: 50,
+        },
+        {
+            nombre: "Furro 3000",
+            precio: 1,
+        },
+        {
+            nombre: "Pingüino",
+            precio: 100,
+        },
+        {
+            nombre: "GPU RTX 3060",
+            precio: 3000,
+        },
+    ];
 
     return (
         <>
@@ -37,7 +65,40 @@ function App() {
                 <hr />
                 {/* para llamar componentes que tengan JSX, los invoco como si fueran etiquetas de HTML con la misma sintaxis */}
             </header>
-            <Main />
+            {/* <Nombre_del_componente /> */}
+            <Main
+                subtitulo="Yo soy el subtitulo"
+                mostrarInfo={true}
+                numero={1}
+                tituloPadre={titulo}
+                actualizarTitulo={setTitulo}
+            />
+
+            <Main subtitulo="Segundo subtitulooooooo" mostrarInfo={false} numero={2} />
+
+            {/* componentes controlados */}
+            {/* todo input debe estar amarrado a un estado */}
+            <div>
+                <input
+                    type="text"
+                    placeholder="ingrese texto..."
+                    value={texto}
+                    // onChange={(e) => {
+                    //     actualizarTexto(e);
+                    // }}
+                    onChange={(e) => {
+                        setTexto(e.target.value);
+                    }}
+                />
+            </div>
+
+            {/* renderizar listas o arreglos */}
+            {/* cuando renderizemos arreglos necesitamos un key x cada item y tiene que ser único el key */}
+            <ul>
+                {productos.map(({ nombre, precio }, i) => (
+                    <li key={i}>{`${nombre} - ${precio}`}</li>
+                ))}
+            </ul>
         </>
     );
 }
