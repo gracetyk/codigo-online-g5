@@ -30,4 +30,25 @@ const crearProducto = async (nuevoProducto) => {
     }
 };
 
-export { obtenerProductos, crearProducto };
+const obtenerProductoPorId = async (id) => {
+    try {
+        const { data } = await axios.get(`${URL}/${id}`);
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const editarProductoPorId = async (id, objProducto) => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        await axios.put(`${URL}/${id}`, objProducto, { headers });
+        return;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export { obtenerProductos, crearProducto, obtenerProductoPorId, editarProductoPorId };

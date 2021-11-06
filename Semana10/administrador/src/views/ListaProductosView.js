@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; //<a>
 import { obtenerProductos } from "../services/productosService";
 
 export default function ListaProductosView() {
@@ -18,9 +19,19 @@ export default function ListaProductosView() {
         getProductos();
     }, []);
 
+    //si quisiera hacerlo en la misma vista crear y ver productos
+    /**const manejarSubmit = async () => {
+		hago la chamba de crear el producto, espero con una await
+		y cuando termine
+		getProductos()
+	}*/
+
     return (
         <div>
             <h1>Productos registrados</h1>
+            <Link to="/crearproducto" className="btn btn-primary my-2">
+                Crear Producto
+            </Link>
             <table className="table">
                 <thead>
                     <tr>
@@ -31,13 +42,17 @@ export default function ListaProductosView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {productos.map(({ nombre, descripcion, precio }, i) => (
+                    {productos.map(({ nombre, descripcion, precio, id }, i) => (
                         <tr key={i}>
                             {/* RECUERDEN: el key es para ident. elementos. generados de un arreglo */}
                             <td>{nombre}</td>
                             <td>{descripcion}</td>
                             <td>{precio}</td>
-                            <td></td>
+                            <td>
+                                <Link className="btn btn-info" to={`/editarproducto/${id}`}>
+                                    Editar
+                                </Link>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
