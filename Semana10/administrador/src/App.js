@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListaProductosView from "./views/ListaProductosView";
 import CrearProductoView from "./views/CrearProductoView";
 import EditarProductoView from "./views/EditarProductoView";
+import ListaCategoriasView from "./views/ListaCategoriasView";
+import CrearCategoriaView from "./views/CrearCategoriaView";
 
 export default function App() {
     return (
@@ -16,6 +18,8 @@ export default function App() {
 						path="/url/:nombre_parametro"
 					*/}
                     <Route path="/editarproducto/:id" element={<EditarProductoView />} />
+                    <Route path="/listacategorias" element={<ListaCategoriasView />} />
+                    <Route path="/crearcategoria" element={<CrearCategoriaView />} />
                 </Routes>
             </Router>
         </div>
