@@ -1,12 +1,18 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import { Navbar, Container, Nav, NavLink } from "react-bootstrap";
+import { CarritoContext } from "../context/carritoContext";
+import { Navbar, Container, Nav, NavLink, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function Navegacion() {
-    const { signOut } = useContext(AuthContext);
+    const { user, signOut } = useContext(AuthContext);
+    const { carrito } = useContext(CarritoContext);
+
+    const totalCarrito = carrito.reduce((total, prod) => {
+        return total + prod.cantidad;
+    }, 0);
 
     return (
         <Navbar bg="light" expand="lg">
@@ -18,17 +24,46 @@ export default function Navegacion() {
                         <Link className="nav-link" to="/">
                             Home
                         </Link>
-                        <Link className="nav-link" to="/checkout">
-                            Checkout
+                        <Link className="nav-link" to="/productosfiltros">
+                            Productos
                         </Link>
+                        {user ? (
+                            <>
+                                <Link className="nav-link" to="/checkout">
+                                    Checkout
+                                </Link>
+                            </>
+                        ) : null}
                     </Nav>
                     <Nav>
                         <Link className="nav-link" to="/carrito">
-                            <Badge badgeContent={10} color="primary">
+                            <Badge badgeContent={totalCarrito} color="primary">
                                 <ShoppingCartIcon />
                             </Badge>
                         </Link>
-                        <NavLink onClick={signOut}>Salir</NavLink>
+                        {/* Login y Logout */}
+
+                        {user ? (
+                            <NavDropdown
+                                title={
+                                    <div className="d-inline">
+                                        <img
+                                            src={user.photoURL}
+                                            className="me-2"
+                                            alt="avatar"
+                                            style={{ borderRadius: "50%", width: "30px" }}
+                                        />
+                                        <span>{user.displayName}</span>
+                                    </div>
+                                }
+                            >
+                                <NavDropdown.Item onClick={signOut}>Salir</NavDropdown.Item>
+                            </NavDropdown>
+                        ) : (
+                            <Link className="nav-link" to="/login">
+                                Ingresar
+                            </Link>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
