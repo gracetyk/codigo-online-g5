@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { CarritoContext } from "../context/carritoContext";
 import { useParams } from "react-router";
 import { obtenerProductoPorId } from "../services/productoService";
+import ReactImageMagnify from "react-image-magnify";
 
 export default function ProductoDetalleView() {
     const [producto, setProducto] = useState(null);
     const [cantidad, setCantidad] = useState(1);
 
     const { id } = useParams(); //un objeto con todos los parámetros de la URL
+
+    const { anadirACarrito } = useContext(CarritoContext);
 
     const getProducto = async () => {
         try {
@@ -24,6 +28,22 @@ export default function ProductoDetalleView() {
         setCantidad(cantidad + numero);
     };
 
+    const anadirACarritoContext = () => {
+        const { id, nombre, precio } = producto;
+        /**   {   id: producto.id,
+			 nombre: producto.nombre,
+			precio: producto.precio,
+			cantidad: cantidad,
+			}; */
+        const nuevoProducto = {
+            id,
+            nombre,
+            precio,
+            cantidad,
+        };
+        anadirACarrito(nuevoProducto);
+    };
+
     useEffect(() => {
         getProducto();
     }, []);
@@ -36,7 +56,22 @@ export default function ProductoDetalleView() {
                 {producto ? (
                     <>
                         <div className="col-12 col-md-6">
-                            <img src={producto.imagen} alt={producto.nombre} className="img-fluid" />
+                            {/* cambiar imagen */}
+                            {/* <img src={producto.imagen} alt={producto.nombre} className="img-fluid" /> */}
+                            <ReactImageMagnify
+                                {...{
+                                    smallImage: {
+                                        alt: producto.nombre,
+                                        isFluidWidth: true,
+                                        src: producto.imagen,
+                                    },
+                                    largeImage: {
+                                        src: producto.imagen,
+                                        width: 1600,
+                                        height: 1200,
+                                    },
+                                }}
+                            />
                         </div>
                         <div className="col-12 col-md-6">
                             <h4>{producto.nombre}</h4>
@@ -61,8 +96,8 @@ export default function ProductoDetalleView() {
                                 >
                                     <i className="fas fa-plus"></i>
                                 </button>
-                                <button className="btn btn-outline-dark ms-3">
-                                    <i class="fas fa-cart-plus"></i> Añadir a carrito
+                                <button className="btn btn-outline-dark ms-3" onClick={anadirACarritoContext}>
+                                    <i className="fas fa-cart-plus"></i> Añadir a carrito
                                 </button>
                             </div>
                             <button className="btn btn-outline-dark btn-lg mt-2">Comprar ahora!</button>
